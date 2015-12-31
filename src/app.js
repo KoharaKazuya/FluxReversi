@@ -1,7 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import FluxReversiApp from './components/FluxReversiApp.react';
 
-React.render(
+ReactDOM.render(
   <FluxReversiApp />,
   document.querySelector('#app')
 );

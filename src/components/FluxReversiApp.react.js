@@ -1,16 +1,27 @@
 import React from 'react';
+import ReversiStore from '../stores/ReversiStore';
+import ReversiActionCreator from '../actions/ReversiActionCreator';
 
 export default class FluxReversiApp extends React.Component {
   constructor() {
     super();
     this.state = {
-      count: 1,
+      running: false,
     };
+  }
+
+  componentDidMount() {
+    ReversiStore.addChangeListener(() => this._onChange());
+    ReversiActionCreator.startGame();
+  }
+
+  _onChange() {
+    this.setState(ReversiStore.getState());
   }
 
   render() {
     return (
-      <div>{ this.state.count }</div>
+      <div>{ JSON.stringify(this.state) }</div>
     );
   }
 }
