@@ -7,4 +7,11 @@ export default {
       actionType: ReversiActions.GAME_START,
     });
   },
+
+  putToken(x, y) {
+    AppDispatcher.dispatch({
+      actionType: ReversiActions.PUT_TOKEN,
+      x, y,
+    });
+  },
 };
