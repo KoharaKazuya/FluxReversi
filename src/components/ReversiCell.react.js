@@ -3,7 +3,7 @@ import CellToken from '../constants/CellToken';
 
 export default class ReversiCell extends React.Component {
   render() {
-    let cellText = '□';
+    let cellText = '　';
     switch (this.props.token) {
       case CellToken.White:
         cellText = '○';
@@ -13,8 +13,14 @@ export default class ReversiCell extends React.Component {
         break;
       default:
     }
+    const style = {
+      backgroundColor: '#EEE',
+      cursor: 'pointer',
+    };
     return (
-      <td onClick={ this.props.onClick }>{ cellText }</td>
+      <td onClick={ this.props.onClick } style={ style }>
+        { cellText }
+      </td>
     );
   }
 }
