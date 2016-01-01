@@ -14,4 +14,11 @@ export default {
       x, y,
     });
   },
+
+  changePlayer(token, playerType) {
+    AppDispatcher.dispatch({
+      actionType: ReversiActions.CHANGE_PLAYER,
+      token, playerType,
+    });
+  },
 };

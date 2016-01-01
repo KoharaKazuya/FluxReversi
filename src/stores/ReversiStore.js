@@ -8,26 +8,26 @@ import { EventEmitter } from 'events';
 import ReversiEvalMachine from './ReversiEvalMachine';
 
 const CHANGE_EVENT = 'change';
+const INIT_CELLS = [
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 2, 0, 0, 0],
+  [0, 0, 0, 2, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+];
 
 const state = {
   running: false,
-  cells: [
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 2, 0, 0, 0],
-    [0, 0, 0, 2, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-  ],
+  cells: JSON.parse(JSON.stringify(INIT_CELLS)),
   nextTurn: CellToken.Black,
   winner: undefined,
-};
-
-const players = {
-  [CellToken.Black]: new ReversiPlayer(ReversiPlayers.Human, CellToken.Black),
-  [CellToken.White]: new ReversiPlayer(ReversiPlayers.EstimatedWeightAI, CellToken.White),
+  players: {
+    [CellToken.Black]: new ReversiPlayer(ReversiPlayers.Human, CellToken.Black),
+    [CellToken.White]: new ReversiPlayer(ReversiPlayers.MinMaxAI, CellToken.White),
+  },
 };
 
 
@@ -35,7 +35,12 @@ const players = {
  * ゲーム開始
  */
 function start() {
+  state.cells = JSON.parse(JSON.stringify(INIT_CELLS));
   state.running = true;
+  // 次の nextTurn 関数内で手番が入れ替えられるので、
+  // 最初の手を黒にするため、逆の白を指定する
+  state.nextTurn = CellToken.White;
+  nextTurn();
 }
 
 /**
@@ -72,7 +77,7 @@ function nextTurn() {
 
   // 次の手番のプレイヤーの手を決定する
   if (state.running) {
-    const player = players[state.nextTurn];
+    const player = state.players[state.nextTurn];
     const action = player.getNextAction(state.cells);
     // 手が未定義（＝人間に任せる）でなければ、手を実行する
     if (action !== undefined) {
@@ -119,6 +124,11 @@ AppDispatcher.register((action) => {
 
     case ReversiActions.PUT_TOKEN:
       putToken(action.x, action.y);
+      ReversiStore.emitChange();
+      break;
+
+    case ReversiActions.CHANGE_PLAYER:
+      state.players[action.token] = new ReversiPlayer(action.playerType, action.token);
       ReversiStore.emitChange();
       break;
 

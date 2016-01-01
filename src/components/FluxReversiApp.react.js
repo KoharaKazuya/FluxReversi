@@ -2,6 +2,7 @@ import React from 'react';
 import ReversiStore from '../stores/ReversiStore';
 import ReversiActionCreator from '../actions/ReversiActionCreator';
 import ReversiTable from './ReversiTable.react';
+import ReversiPlayer from './ReversiPlayer.react';
 import CellToken from '../constants/CellToken';
 
 export default class FluxReversiApp extends React.Component {
@@ -17,6 +18,10 @@ export default class FluxReversiApp extends React.Component {
 
   _onChange() {
     this.setState(ReversiStore.getState());
+  }
+
+  _start() {
+    ReversiActionCreator.startGame();
   }
 
   render() {
@@ -42,6 +47,9 @@ export default class FluxReversiApp extends React.Component {
         <div>{ JSON.stringify(this.state) }</div>
         <ReversiTable cells={ this.state.cells } />
         <div>{ infoText }</div>
+        <ReversiPlayer player={ this.state.players[CellToken.Black] } />
+        <ReversiPlayer player={ this.state.players[CellToken.White] } />
+        <button type="button" onClick={ this._start }>ゲーム開始（リセット）</button>
       </div>
     );
   }
