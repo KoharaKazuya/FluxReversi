@@ -20,14 +20,28 @@ export default class FluxReversiApp extends React.Component {
   }
 
   render() {
+    let infoText;
+    if (this.state.running) {
+      if (this.state.nextTurn === CellToken.Black) {
+        infoText = '次のターンは 黒 です';
+      } else {
+        infoText = '次のターンは 白 です';
+      }
+    } else {
+      infoText = 'ゲーム終了！';
+      if (this.state.winner === CellToken.Black) {
+        infoText += ' 黒 の勝利！';
+      } else if (this.state.winner === CellToken.White) {
+        infoText += ' 白 の勝利！';
+      } else {
+        infoText += ' 引き分け...';
+      }
+    }
     return (
       <div>
         <div>{ JSON.stringify(this.state) }</div>
         <ReversiTable cells={ this.state.cells } />
-        <div>{
-          this.state.nextTurn === CellToken.Black ?
-            '次のターンは 黒 です' : '次のターンは 白 です'
-        }</div>
+        <div>{ infoText }</div>
       </div>
     );
   }
