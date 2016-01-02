@@ -1,5 +1,6 @@
 import assign from 'object-assign';
 import AppDispatcher from '../dispatcher/AppDispatcher';
+import ReversiActionCreator from '../actions/ReversiActionCreator';
 import ReversiPlayer from './ReversiPlayer';
 import ReversiActions from '../constants/ReversiActions';
 import CellToken from '../constants/CellToken';
@@ -78,11 +79,10 @@ function nextTurn() {
   // 次の手番のプレイヤーの手を決定する
   if (state.running) {
     const player = state.players[state.nextTurn];
-    const action = player.getNextAction(state.cells);
-    // 手が未定義（＝人間に任せる）でなければ、手を実行する
-    if (action !== undefined) {
-      putToken(action.x, action.y);
-    }
+    player.getNextAction(state.cells)
+    .then((action) => {
+      ReversiActionCreator.putToken(action.x, action.y);
+    });
   }
 }
 

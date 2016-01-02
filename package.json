@@ -4,7 +4,7 @@
   "description": "A reversi game implemated by the Flux architecture.",
   "main": "app.js",
   "scripts": {
-    "build": "watchify src/app.js -t [ babelify --presets [ es2015 react ] ] --outfile build/bundle.js --verbose --debug",
+    "build": "watchify src/app.js -t [ babelify --presets [ es2015 react ] ] --outfile build/bundle.js --verbose --debug & watchify src/stores/ReversiPlayerAiWorker.js -t [ babelify --presets [ es2015 ] ] --outfile build/ReversiPlayerAiWorker.js --verbose --debug",
     "server": "cd build; live-server",
     "test": "eslint src",
     "start": "npm run build & npm run server"
