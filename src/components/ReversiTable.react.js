@@ -1,15 +1,10 @@
 import React from 'react';
 import ReversiCell from './ReversiCell.react';
-import ReversiActionCreator from '../actions/ReversiActionCreator';
 
 export default class ReversiTable extends React.Component {
 
   constructor(props) {
     super(props);
-  }
-
-  _onClick(row, col) {
-    ReversiActionCreator.putToken(col, row);
   }
 
   render() {
@@ -21,7 +16,7 @@ export default class ReversiTable extends React.Component {
             <tr key={ i }>
             { line.map((cell, j) => {
               return (
-                <ReversiCell token={ cell } onClick={ () => this._onClick(i, j) } key={ j } />
+                <ReversiCell token={ cell } onClick={ () => this.props.onCellClick(i, j) } key={ j } />
               );
             }) }
             </tr>
@@ -34,4 +29,5 @@ export default class ReversiTable extends React.Component {
 
 ReversiTable.propTypes = {
   cells: React.PropTypes.arrayOf(React.PropTypes.arrayOf(React.PropTypes.number)).isRequired,
+  onCellClick: React.PropTypes.func,
 };

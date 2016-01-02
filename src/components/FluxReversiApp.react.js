@@ -4,6 +4,7 @@ import ReversiActionCreator from '../actions/ReversiActionCreator';
 import ReversiTable from './ReversiTable.react';
 import ReversiPlayer from './ReversiPlayer.react';
 import CellToken from '../constants/CellToken';
+import ReversiPlayers from '../constants/ReversiPlayers';
 
 export default class FluxReversiApp extends React.Component {
   constructor() {
@@ -22,6 +23,16 @@ export default class FluxReversiApp extends React.Component {
 
   _start() {
     ReversiActionCreator.startGame();
+  }
+
+  _onCellClick(row, col) {
+    const playerType = this.state.players[this.state.nextTurn].type;
+    if (playerType !== ReversiPlayers.Human) {
+      // 現在の手番のプレイヤーの種別が「人」でなければ、クリックを無効にする
+      return;
+    }
+
+    ReversiActionCreator.putToken(col, row);
   }
 
   render() {
@@ -45,7 +56,7 @@ export default class FluxReversiApp extends React.Component {
     return (
       <div>
         <div>{ JSON.stringify(this.state) }</div>
-        <ReversiTable cells={ this.state.cells } />
+        <ReversiTable cells={ this.state.cells } onCellClick={ (i, j) => this._onCellClick(i, j) } />
         <div>{ infoText }</div>
         <ReversiPlayer player={ this.state.players[CellToken.Black] } />
         <ReversiPlayer player={ this.state.players[CellToken.White] } />
