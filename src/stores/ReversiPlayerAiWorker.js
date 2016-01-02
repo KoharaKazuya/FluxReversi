@@ -25,6 +25,14 @@ self.onmessage = (e) => {
  * @return {Number} 得点
  */
 function evalScore(estimatedCells, token) {
+  // 与えられた盤面に空きマスがなければ、重み付け関係なしにコマ数だけの評価をする
+  if (! ReversiEvalMachine.hasEmptyCell(estimatedCells)) {
+    // flatten
+    const flattenCells = Array.prototype.concat.apply([], estimatedCells);
+    const numOfToken = flattenCells.filter((cell) => cell === token).length;
+    return numOfToken * 10000;  // 以下の評価と比較された場合、以下の評価を無視するために十分大きくする
+  }
+
   let score = 0;
   const reversed = ReversiEvalMachine.reversedToken(token);
   for (let y = 0; y < estimatedCells.length; y++) {

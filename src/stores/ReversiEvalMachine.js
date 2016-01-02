@@ -120,6 +120,41 @@ const ReversiEvalMachine = {
     }
     return false;
   },
+
+  /**
+   * 残り空きマス数
+   *
+   * @param {Array<Array<Number>>} cells 盤面を示す２次元配列
+   * @return {Number} 空きマス数
+   */
+  getNumOfEmpty(cells) {
+    let count = 0;
+    for (let y = 0; y < cells.length; y++) {
+      for (let x = 0; x < cells[y].length; x++) {
+        if (cells[y][x] === CellToken.Empty) {
+          count += 1;
+        }
+      }
+    }
+    return count;
+  },
+
+  /**
+   * 空きマスが一つでもあるか
+   *
+   * @param {Array<Array<Number>>} cells 盤面を示す２次元配列
+   * @return {Boolean} 空きマスがあれば true / なければ false
+   */
+  hasEmptyCell(cells) {
+    for (let y = 0; y < cells.length; y++) {
+      for (let x = 0; x < cells[y].length; x++) {
+        if (cells[y][x] === CellToken.Empty) {
+          return true;
+        }
+      }
+    }
+    return false;
+  },
 };
 
 export default ReversiEvalMachine;
